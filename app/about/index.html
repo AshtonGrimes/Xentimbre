@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<!-- This file is part of Xentimbre, which is released under the GNU General Public License v3 or later. -->
+<!-- See the COPYING or LICENSE file in the root directory of this project or visit <http://www.gnu.org/licenses/gpl-3.0.html>. -->
+
+<head>
+    <link rel="stylesheet" href="../xt.css">
+    <link rel="icon" type="image/png" href="../icon.png">
+    <title>Xentimbre</title>
+    <meta name="description" content="A webapp for creating custom timbres">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { margin: 5vmin }
+        p, li { margin: 1vmin 2vmin }
+        h { margin: 1vmin }
+        ul { padding-left: 4vmin }
+    </style>
+</head>
+
+<body>
+    <h1>Xentimbre</h1>
+    <h2 id="subtitle">A webapp for creating custom timbres</h2>
+    <p>Version 1.0.1</p>
+
+    <div class="section">
+        <h2>Introduction</h2>
+        <p>Xentimbre is a webapp designed for creating and manipulating musical timbres to be used in samplers. It is my personal project designed to provide timbre customization features not found in other musical software, allowing the musician to tailor individual harmonics to their preference.</p>
+        <p>Since this is my first (and currently my only) webdev project, any <a href="/feedback">feedback</a> is appreciated.</p>
+        <p>Xentimbre is free software licensed under the <a href="#license">GNU General Public License version 3</a>.</p>
+    </div>
+
+    <div class="section">
+        <h2>Key Bindings</h2>
+        <p>The keyboard player maps keys to notes in ascending order from left to right, bottom to top. Each key increments by 1 step of the specified tuning (12edo by default). The <code>A</code> key is used for the reference frequency.</p>
+        <p>Volume can be increased with the <code>+</code>/<code>=</code> keys, and decreased with the <code>-</code> key, along with the <code>Page Volume</code> slider.</p>
+        <p>In case a key ever gets "stuck" or the player gets too noisy, the <code>SPACE</code> key can be used to reset all audio coming from the page. The <code>SPACE</code> key closes the page's current audio context and assigns a new one, cutting off all sounds still playing at the moment the audio context is closed.</p>
+    </div>
+
+    <div class="section">
+        <h2>Editing harmonics</h2>
+        <p>There are currently 32 harmonics counting the fundamental (the first harmonic, with ratio 1), though more can easily be added in future releases if necessary. Each of the harmonics after the fundamental has a ratio, amplitude, and phase parameter. Whole numbers, decimals, and single fractions are valid inputs. Any invalid inputs for these parameters will be marked red, and the changes will be ignored.</p>
+        <p>The ratio parameter must be >= 1. Valid ratios include <code>2.7</code>, <code>3/2</code>, and <code>6.5/3</code>. Ratios can be arbitrarily large, but trying to play any ratio (or reference frequency) that causes the player to exceed 20,000 Hz will be muted.</p>
+        <p>The amplitude parameter must be > 0 and <= 1. Valid amplitudes include <code>1/7</code>, <code>0.83</code>, and <code>2.3/8</code>. Note that an amplitude of 1 is full volume relative to the page volume, although each amplitude is divided by the average of all the harmonics' amplitudes to prevent the player from clipping.</p>
+        <p>If the ratio or amplitude parameters are cleared, the harmonic is ignored without any warning for an invalid input.</p>
+        <p>The phase parameter must be >= -0.5 and <= 0.5. Valid phases include <code>1/3</code>, <code>-0.2</code>, and <code>-4.5/17</code>.</p>
+        <p>If the phase parameter is cleared, a default phase of 0 will be used.</p>
+        <p>The fundamental has its ratio locked at 1 and its phase (not shown) locked at 0. However, the amplitude can be modified the same as any other harmonic, since there are many timbres with a fundamental softer than a more prevalent harmonic. All harmonics and phase adjustments can be thought of as relative to the fundamental.</p>
+        <p>Beneath the fundamental's amplitude parameter, there is a <code>Clear</code> button which resets every harmonic.</p>
+    </div>
+
+    <div class="section">
+        <h2>Sliders and Settings</h2>
+        <p>The center left section contains the parameters for the tuning, reference frequency, dissonance graph marks, and volume. There is also a preset selection for harmonics.</p>
+        <p>The tuning parameters are in the format N equal divisions of R, where N must be a whole number > 0 and R is a ratio subject to the same rules as the harmonic ratio parameters.</p>
+        <p><code>Reference</code> must be a whole number or decimal frequency. This frequency is used not only for the player, but for the frequency of any sample exports.</p>
+        <p><code>Dissonance Mark Sensitivity</code> adjusts the threshold of local minima required to produce a ratio marker on the dissonance curve graph. Adjusting the slider all the way to the left removes all marks, and all the way to the right marks every local minimum regardless of how sharp the dip in the graph is.</p>
+        <p><code>Page Volume</code> adjusts the player volume, exclusive to the page. This does not affect the export volume and is not to be confused with the volume of the device accessing the page.</p>
+        <p><code>Preset</code> contains a dropdown, where each options produces the waveform in its name, except <code>None</code> does nothing.</p>
+        <ul>
+            <li>Selecting <code>Triangle</code> sets a pattern of odd harmonics (1, 3, 5...), with amplitude 1 / (ratio^2) and every even harmonic is offset by 0.5.</li>
+            <li>Selecting <code>Sawtooth</code> sets a pattern of a harmonic series (1, 2, 3...), with amplitude 1 / ratio and no offsets.</li>
+            <li>Selecting <code>Square</code> sets a pattern of odd harmonics (1, 3, 5...), with amplitude 1 / ratio and no offsets.</li>
+        </ul>
+        <p>The center right section contains sliders for the ADSR envelope.</p>
+        <p><code>Attack</code>, <code>Decay</code>, and <code>Release</code> each range from 0 to 2 seconds, with 0.04 second increments.</p>
+        <p><code>Sustain</code> is the only one of the ADSR envelope parameters that is not a duration. It is an amplitude ratio from 0 to 1, with 0.02 increments. This determines the amplitude of each note following the attack.</p>
+        <p>In the display, <code>Sustain</code> has a fixed length of 1 second, drawn relative to the duration of the other envelope parameters.</p>
+    </div>
+    <div class="section">
+        <h1>Graphs</h1>
+        <p>Above the harmonics, there are two graphs: <code>Dissonance Curve</code> and <code>Ideal edNs</code>. Both of these graphs can have their range scaled relative to the left side (lower x-axis bound) of each graph; clicking the left side reduces the range, and clicking the right side increases the range, equivalent to horizontally zooming in or out on the graph.</p>
+        <p><code>Dissonance Curve</code> displays the dissonance, ranging from 0 to 1, of the timbre at a certain ratio. The graph by default ranges from 1 to the equave. When scaling the graph, white marks are used to mark successive exponents of the equave; for example, the leftmost mark would be equave^1, followed by equave^2, until the x-axis limit is reached. There are also optional green markers for local minima of the dissonance curve, with a number labeling the ratio at that point.</p>
+        <p><code>Ideal edNs</code> displays a measure of fitness for the timbre, ranging from 0 to 1, at each x-edN. The graph by default ranges from 0edN to 20edN, where N is the equave. Ruler marks are used as a number line to find certain edNs on the graph, where the tallest marks correspond to multiples of 8, followed by multiples of 4, multiples of 2, and odd numbers.</p>
+    </div>
+
+    <div id="license">
+        <h2>License</h2>
+        <p>Xentimbre is licensed under the GNU General Public License v3 or later (GPL-3.0-or-later). The full text of the license can be found in the LICENSE file included with the source code. You are free to modify and redistribute this project under the terms of this license.</p>
+        <p>For more information on this license, please see the GNU General Public License v3.0 here: <a href="http://www.gnu.org/licenses/gpl-3.0.html">http://www.gnu.org/licenses/gpl-3.0.html</a></p>
+    </div>
+</body>
+
+</html>

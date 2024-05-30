@@ -1,0 +1,296 @@
+/* This file is part of Xentimbre, which is released under the GNU General Public License v3 or later. */
+/* See the COPYING or LICENSE file in the root directory of this project or visit <http://www.gnu.org/licenses/gpl-3.0.html>. */
+
+html { overflow: hidden }
+div { display: flex }
+
+*, * h2 { 
+  font-size: 1.2vmin;
+  user-select: none;
+}
+
+body { 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.appcont {
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 85vw;
+  height: 95vh;
+}
+
+.panel {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #DDD;
+  width: 100%;
+}
+
+.top { height: 8%; justify-content: space-between }
+.draws { height: 22%; justify-content: space-around }
+.hcont { height: 29% }
+.kcont { height: 29% }
+
+.title {
+  justify-content: center;
+  width: 50%;
+  height: 80%;
+  margin: auto;
+}
+
+.title h2 { 
+  color: #55E8A6;
+  font-size: 2vmin;
+  margin: auto; 
+}
+
+.misc {
+  flex-direction: row;
+  align-items: center;
+  width: 20%;
+}
+
+.misc a {
+  font-size: 80%;
+  font-weight: bold;
+}
+
+.misc div {
+  font-size: 70%;
+  font-weight: bold;
+  height: 60%;  
+}
+
+.left {
+  justify-content: flex-start;
+  margin: 0 auto 0 1vw;
+}
+
+.right {
+  justify-content: flex-end;
+  margin: 0 1vw 0 auto;
+}
+
+.left > *:nth-child(2), .left > *:last-child { margin-left: 1vw }
+
+.right > *:first-child, .right > *:nth-child(2) { margin-right: 1vw }
+
+.left > a:nth-child(2), .expcont > a { cursor: pointer }
+
+#importStatus { color: #D00 }
+
+.misc img {
+  width: 3vh;
+  height: 3vh;
+}
+
+#explen {
+  background-color: transparent;
+  width: 1vw;
+  margin-left: 0.4vw;
+}
+
+.draws h2 { margin: 0 0 1% 0 }
+
+.draws div canvas {
+  width: 100%;
+  height: 80%;
+  border: 1px solid #DDD;
+}
+
+.disscont, .othercont {
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  width: 40%;
+  height: 90%;
+}
+
+.optcont {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 10%;
+  height: 40%;
+  border: 1px solid #DDD;
+}
+
+.opts {
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  height: 90%;
+}
+
+.sel {
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 50%;
+}
+
+#diss, #other { cursor: pointer }
+
+.hcont {
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.hcont > div {
+  height: 80%;
+  border: 1px solid #DDD;
+}
+
+.ed-freq > * { 
+  margin: 0.8% 0 0.8% 0;
+  font-size: 80%;
+}
+
+.ed-freq {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 20%;
+}
+
+.ed-freq input[type="text"] {
+  background-color: transparent;
+  width: 2vw;
+}
+
+#dissSens { width: 5.5vw }
+
+#vol { width: 7vw }
+
+.harmonics {
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  width: 40%;
+}
+
+.har {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 13.5%;
+  height: 100%;
+  margin: 0 auto;
+  border-right: 1px solid #DDD;
+  border-bottom: 1px solid #DDD;
+}
+
+.har * { font-size: 85% }
+
+.har > *, .env > * { margin: 4% 0 4% 0 }
+
+.har:last-child { border-right: none }
+
+.har input {
+  background-color: transparent;
+  width: 2.5vw;
+  height: 1.5vh;
+}
+
+.har:first-child button {
+  background-color: #DDD;
+  font-size: 70%;
+  color: #222;
+  width: 60%;
+  height: 8%;
+}
+
+.har:first-child button:hover { background-color: #AAA }
+
+.har:first-child button:active { background-color: #AFF }
+
+.env {
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 20%;
+}
+
+#adsr-graph {
+  width: 100%;
+  height: 50%;
+  margin: 0 0 auto 0;
+  border-bottom: 1px solid white;
+}
+
+.econt {
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  width: 90%;
+  height: 40%;
+  margin: 0 !important;
+  padding-bottom: 0.5vh;
+}
+
+.erow {
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  height: 25%;
+  margin: 0 !important;
+}
+
+.erow input { 
+  width: 40%; 
+  margin: 0 auto 0 0.5vw;
+}
+
+.erow p { 
+  width: 40%;
+  margin: 0 0.5vw 0 auto;
+}
+
+.keyboard {
+  margin: auto;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+  height: 90%;
+}
+
+.keyboard > div {
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.keys div {
+  display: flex
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.5s ease;
+  width: 5vmin;
+  height: 5vmin;
+  border: 1px solid black;
+  border-radius: 0.5vmin;
+  margin: auto 1.5vmin;
+}
+
+.keys div * { margin: auto }
+
+#spc {
+  border: none !important;
+  width: 2vmin !important;
+  margin: 0 !important;
+}

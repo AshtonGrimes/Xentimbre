@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+
+<!-- This file is part of Xentimbre, which is released under the GNU General Public License v3 or later. -->
+<!-- See the COPYING or LICENSE file in the root directory of this project or visit <http://www.gnu.org/licenses/gpl-3.0.html>. -->
+
+<head>
+    <link rel="stylesheet" href="xt.css">
+    <link rel="stylesheet" href="app.css">
+    <link rel="icon" type="image/png" href="icon.png">
+    <title>Xentimbre</title>
+    <meta name="description" content="A webapp for creating custom timbres">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="app-util.js" defer></script>
+    <script src="app.js" defer></script>
+</head>
+
+<body>
+    <div class="appcont">
+        <input type="file" id="import" style="display: none">
+        <div class="panel top">
+            <div class="misc left">
+                <a href="/about" style="text-decoration: none"><p>About</p></a>
+                <a onclick="sampleImport()"><p>Import sample</p></a>
+                <p id="importStatus"></p>
+            </div>
+
+            <div class="title">
+                <h2>Xentimbre</h2>
+            </div>
+
+            <div class="misc right">
+                <div class="expcont">
+                    <a onclick="sampleExport()"><p>Export sample:</p></a>
+                    <p><input type="text" id="explen">s</p>
+                </div>
+                <a href="https://github.com/AshtonGrimes/Xentimbre"><img src="github.png"></a>
+            </div>
+        </div>
+
+        <div class="panel draws">
+            <div class="disscont">
+                <h2>Dissonance Curve</h2>
+                <canvas id="diss"></canvas>
+            </div>
+
+            <div class="optcont">
+                <div class="opts">
+                    <div class="sel">
+                        <input type="radio" id="edn-sel" name="opts" value="edn" onclick="handleSelect(this.value)" checked>
+                        <label for="edn-sel">Optimal edN</label><br>
+                    </div>
+                    <div class="sel">
+                        <input type="radio" id="wave-sel" name="opts" value="wave" onclick="handleSelect(this.value)">
+                        <label for="wave-sel">Waveform</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="othercont">
+                <h2 id="othertext">Ideal ed2s</h2>
+                <canvas id="other"></canvas>
+            </div>
+        </div>
+
+        <div class="panel hcont">
+            <div class="ed-freq">
+                <h2>Tuning</h2>
+                <p><input type="text" value="12" id="divs">ed<input type="text" value="2" id="interval"></p>
+                <h2>Reference</h2>
+                <p><input type="text" value="262" id="ref"> hz</p>
+                <h2>Dissonance Mark Sensitivity</h2>
+                <input type="range" id="dissSens" min="0" max="40" value="12">
+                <h2>Page Volume</h2>
+                <p id="voltext">30%</p><input type="range" id="vol" min="0" max="100" value="30">
+                <p>Preset: <select id="preset">
+                    <option value="none" selected>None</option>
+                    <option value="triangle">Triangle</option>
+                    <option value="sawtooth">Sawtooth</option>
+                    <option value="square">Square</option>
+                </select></p>
+            </div>
+
+            <div class="harmonics">
+                <div class="har 1">
+                </div>
+                <div class="har 2">
+                </div>
+                <div class="har 3">
+                </div>
+                <div class="har 4">
+                </div>
+                <div class="har 5">
+                </div>
+                <div class="har 6">
+                </div>
+                <div class="har 7">
+                </div>
+                <div class="har 8">
+                </div>
+                <div class="har 9">
+                </div>
+                <div class="har 10">
+                </div>
+                <div class="har 11">
+                </div>
+                <div class="har 12">
+                </div>
+                <div class="har 13">
+                </div>
+                <div class="har 14">
+                </div>
+                <div class="har 15">
+                </div>
+                <div class="har 16">
+                </div>
+                <div class="har 17">
+                </div>
+                <div class="har 18">
+                </div>
+                <div class="har 19">
+                </div>
+                <div class="har 20">
+                </div>
+                <div class="har 21">
+                </div>
+                <div class="har 22">
+                </div>
+                <div class="har 23">
+                </div>
+                <div class="har 24">
+                </div>
+                <div class="har 25">
+                </div>
+                <div class="har 26">
+                </div>
+                <div class="har 27">
+                </div>
+                <div class="har 28">
+                </div>
+                <div class="har 29">
+                </div>
+                <div class="har 30">
+                </div>
+                <div class="har 31">
+                </div>
+                <div class="har 32">
+                </div>
+            </div>
+
+            <div class="env">
+                <canvas id="adsr-graph"></canvas>
+                <div class="econt">
+                    <div class="erow">
+                        <p id="atttext">Attack: 0.2s</p><input type="range" id="att" min="0" max="50" value="5">
+                    </div>
+                    <div class="erow">
+                        <p id="dectext">Decay: 0.2s</p><input type="range" id="dec" min="0" max="50" value="5">
+                    </div>
+                    <div class="erow">
+                        <p id="sustext">Sustain: 0.8</p><input type="range" id="sus" min="0" max="50" value="40">
+                    </div>
+                    <div class="erow">
+                        <p id="reltext">Release: 1s</p><input type="range" id="rel" min="0" max="50" value="25">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel kcont">
+            <div class="keyboard">
+                <div class="keys r1">
+                    <div id="k1">
+                        <p>1</p>
+                    </div>
+                    <div id="k2">
+                        <p>2</p>
+                    </div>
+                    <div id="k3">
+                        <p>3</p>
+                    </div>
+                    <div id="k4">
+                        <p>4</p>
+                    </div>
+                    <div id="k5">
+                        <p>5</p>
+                    </div>
+                    <div id="k6">
+                        <p>6</p>
+                    </div>
+                    <div id="k7">
+                        <p>7</p>
+                    </div>
+                    <div id="k8">
+                        <p>8</p>
+                    </div>
+                    <div id="k9">
+                        <p>9</p>
+                    </div>
+                    <div id="spc">
+                    </div>
+                    <div id="spc">
+                    </div>
+                    <div id="spc">
+                    </div>
+                </div>
+                <div class="keys r2">
+                    <div id="spc">
+                    </div>
+                    <div id="q">
+                        <p>Q</p>
+                    </div>
+                    <div id="w">
+                        <p>W</p>
+                    </div>
+                    <div id="e">
+                        <p>E</p>
+                    </div>
+                    <div id="r">
+                        <p>R</p>
+                    </div>
+                    <div id="t">
+                        <p>T</p>
+                    </div>
+                    <div id="y">
+                        <p>Y</p>
+                    </div>
+                    <div id="u">
+                        <p>U</p>
+                    </div>
+                    <div id="i">
+                        <p>I</p>
+                    </div>
+                    <div id="o">
+                        <p>O</p>
+                    </div>
+                    <div id="spc">
+                    </div>
+                    <div id="spc">
+                    </div>
+                </div>
+                <div class="keys r3">
+                    <div id="spc">
+                    </div>
+                    <div id="spc">
+                    </div>
+                    <div id="a">
+                        <p>A</p>
+                    </div>
+                    <div id="s">
+                        <p>S</p>
+                    </div>
+                    <div id="d">
+                        <p>D</p>
+                    </div>
+                    <div id="f">
+                        <p>F</p>
+                    </div>
+                    <div id="g">
+                        <p>G</p>
+                    </div>
+                    <div id="h">
+                        <p>H</p>
+                    </div>
+                    <div id="j">
+                        <p>J</p>
+                    </div>
+                    <div id="k">
+                        <p>K</p>
+                    </div>
+                    <div id="l">
+                        <p>L</p>
+                    </div>
+                    <div id="spc">
+                    </div>
+                </div>
+                <div class="keys r4">
+                    <div id="spc">
+                    </div>
+                    <div id="spc">
+                    </div>
+                    <div id="spc">
+                    </div>
+                    <div id="z">
+                        <p>Z</p>
+                    </div>
+                    <div id="x">
+                        <p>X</p>
+                    </div>
+                    <div id="c">
+                        <p>C</p>
+                    </div>
+                    <div id="v">
+                        <p>V</p>
+                    </div>
+                    <div id="b">
+                        <p>B</p>
+                    </div>
+                    <div id="n">
+                        <p>N</p>
+                    </div>
+                    <div id="m">
+                        <p>M</p>
+                    </div>
+                    <div id=",">
+                        <p>,</p>
+                    </div>
+                    <div id=".">
+                        <p>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
