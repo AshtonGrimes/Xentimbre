@@ -74,7 +74,6 @@ fn handle_client(mut client: TcpStream) {
         let file: (&str, &str) = match &request[(first_two_spaces[0] + 1)..first_two_spaces[1]] {
             "/" => ("index.html", "text/html"), 
             "/about" => ("about/index.html", "text/html"),
-            "/feedback" => ("feedback/index.html", "text/html"),
             "/xt.css" => ("xt.css", "text/css"),
             "/app.css" => ("app.css", "text/css"),
             "/app.js" => ("app.js", "application/javascript"),
@@ -91,7 +90,7 @@ fn handle_client(mut client: TcpStream) {
         };
         let data = std::fs::read(format!("{}{}", APP_DIR, file.0)).unwrap();
         let do_mobile_warn = file.0 == "index.html" && (request.contains("obile") || request.contains("iPhone") || request.contains("iPad") || request.contains("ndroid"));
-        let mobile_str = b"\n<script>alert(\"This webapp is intended for computers with external keyboards, not mobile devices. You can still access this page; just understand it will not display or function as intended. If you are not on a mobile device but still seeing this popup, please send a report (go to http://xentimbre.xyz/feedback/) including what device/browser you were using.\")</script>\n";
+        let mobile_str = b"\n<script>alert(\"This webapp is intended for computers with external keyboards, not mobile devices. You can still access this page; just understand it will not display or function as intended. If you are not on a mobile device but still seeing this popup, please submit a bug report on Github including what device/browser you were using.\")</script>\n";
 
         let header = format!(
             "HTTP/1.1 200 OK\r\nServer: Custom (Unix)\r\nConnection: {}\r\nAccept-Ranges: none\r\nContent-Length: {}\r\nContent-Type: {}\r\n\r\n",
